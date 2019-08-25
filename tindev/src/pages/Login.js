@@ -1,0 +1,80 @@
+import React, { useState } from 'react';
+import {View, Text, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
+
+import api from '../services/api';
+
+import logo from '../assets/TinDev.png';
+
+export default function Login({ navigation }) {
+  const [user, setUser] = useState('');
+  
+  async function handleLogin() {
+    const response = await api.post('/devs', { username: user });
+
+    const { _id } = response.data;
+    console.log(_id);
+    
+    navigation.navigate('Main', { _id });
+
+  }
+
+  return (
+    <View style={styles.container}>
+      <Image source={logo} style={{width: "30%", height: "30%"}} resizeMode={"center"} />
+
+      <TextInput 
+        autoCapitalize="none"
+        autoCorrect={false}
+        placeholder="Usuário"
+        placeholderTextColor="#ccc"
+        style={styles.input}
+        value={user}
+        onChangeText={setUser}
+
+      />
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
+        <Text style={styles.buttonText}>Enviar</Text>
+      </TouchableOpacity>
+
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#373940',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 30,
+  },
+
+  input:{
+    height: 46,
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderColor:'#ddd',
+    borderRadius: 20,
+    color: '#ddd',
+    marginTop: 20,
+    paddingHorizontal: 15,
+  },
+
+  button:{
+    height: 46,
+    alignSelf: 'stretch',
+    backgroundColor: '#FFFF00',
+    borderRadius: 20,
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  buttonText:{
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#373940',
+
+
+  },
+});
